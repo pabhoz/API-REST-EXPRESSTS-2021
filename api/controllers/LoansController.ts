@@ -1,11 +1,19 @@
 import { Request, Response } from "express";
-import { Loan } from "../../models/Loan";
+import LoansService from "../../services/LoansService";
 // import { checkKeys } from "../../shared/Validators";
 
 const LoansController = {
-    getAll: async (req: Request, res: Response) => {
-        const loans = await Loan.find({});
-        res.status(200).send(loans);
+    getAll: async (_:Request, res: Response) => {
+        try {
+            const loans = await LoansService.getAll();
+            res.status(200).send(loans);
+        } catch (error) {
+            console.log(error.stack && error.stack || error);
+            res.status(500).send({
+                error: true,
+                msg: error
+            })
+        }
     },
 
     create: (req: Request, res: Response) => {
